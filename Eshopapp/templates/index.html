@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load cart %}
+{% load custom_filter %}
+<div class="container-fluid mt-3">
+		<div class="row">
+
+		<!-- filtre -->	
+
+		<div class="col-lg-3 mx-auto">
+		<div class="list-group">
+			<a href="{% url 'index' %}" class="list-group-item list-group-item-action">Tous les Produits</a>
+			{% for cat in categorie %}
+
+
+			
+			<a href="{% url 'index' %}?categorie={{cat.id}}" class="list-group-item list-group-item-action">{{cat.nom}}</a>
+			
+		
+			{% endfor %}
+		</div>	
+			
+		</div>
+
+
+
+<!-- les produits-->	
+			<div id="produit" class="col-lg-9 mx-auto">
+				<div class="row mx-auto">
+		{% for prod in produit %}	
+		
+  		<div class="card mx-auto mb-3" id="{{prod.id}}" style="width: 18rem;">
+		  <img src="{{prod.image.url}}" class="card-img-top" alt="...">
+		  <div class="card-body">
+		    <h5 class="card-title">{{prod.nom}}</h5>
+		    <p class="card-text">{{prod.description}}</p>
+		    <p class="card-text">
+		    	<b>{{prod.prix|monaie}}</b></p>
+
+		    <!--	{{prod | is_in_cart:request.session.cart }}-->
+
+		 	
+		    
+          </div>
+
+          <div class="card-footer p-0 no-gutters">
+
+          	{% if prod|is_in_cart:request.session.cart %}
+
+          	<div class="row no-gutters">
+
+	          	
+
+		    <form action="{% url 'index' %}#{{prod.id}}" method="POST" class="col-2">
+	         		{% csrf_token %}
+	         	<input hidden="" type="text" name="produit" value="{{prod.id}}">
+
+	         	<input hidden="" type="text" name="remove" value="True">
+	         	<input type="submit" value=" - " class=" btn btn-block  btn-success">
+
+
+	         </form> 
+
+	          <div class="text-center col">{{prod|cart_quantity:request.session.cart}} en panier</div>
+
+	         <form action="{% url 'index' %}#{{prod.id}}" method="POST" class="col-2">
+	         		{% csrf_token %}
+	         	<input hidden="" type="text" name="produit" value="{{prod.id}}">
+	         	<input type="submit" value=" + " class=" btn btn-block  btn-success">
+	         </form> 
+
+	          	
+	          	
+	      </div>
+
+	      	{% else %}
+
+
+          	<form action="{% url 'index' %}#{{prod.id}}" method="POST" class="btn-block">
+			    		{% csrf_token %}
+			    		<input hidden="" type="text" name="produit" value="{{prod.id}}">	
+			    		
+			    	
+
+			    		<input type="submit" class=" float-right btn btn-success border form-control" value="Ajout Panier" name="">
+
+			</form>
+          	
+          	{% endif %}
+	          		
+          	
+
+          </div>
+
+          
+
+         
+        </div>
+
+        {% endfor  %}
+         </div>
+				
+			</div>
+			
+		</div>
+  	</div>
+
+
+
+{% endblock %}	
+
+	
+		
+		   

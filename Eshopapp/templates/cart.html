@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load cart %}
+{% load custom_filter %}
+
+<h1>Mon Panier</h1>
+<div class="container">
+	<div class="border rounded p-4 m-4">
+		<p class=" text-center display-4 pl-4 ml-4"> Mon Panier</p>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>N°</th>
+					<th>Image</th>
+					<th>Produit</th>
+					<th>Prix</th>
+					<th>Quantite</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for prod in produits %}
+			<tr>
+				<td>{{forloop.counter}}</td>
+				<td> <img style="height: 50px;" class="rounded-circle" src="{{prod.image.url}}"></td>
+				<td>{{prod.nom}}</td>
+				<td>{{prod.prix|monaie}}</td>
+				<td>{{prod|cart_quantity:request.session.cart}}</td>
+				<td>{{prod|price_total:request.session.cart|monaie}}</td>
+			</tr>
+
+			{% endfor %}
+
+			</tbody>
+		<tfoot>
+			<tr>
+				
+				<th class=" " colspan="4">
+					
+				</th>
+
+				<th class="" colspan="">
+					Total
+				</th>
+				<th>{{produits|total_cart_price:request.session.cart|monaie}}</th>
+			</tr>
+		</tfoot>	
+
+		</table>
+		<div class="m-3 p-3">
+			<a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-success border rounded col-lg-3 float-right">Valider ma commande</a>
+			
+		</div>
+		
+	</div>
+	
+	
+</div>
+
+<!-- Modale !-->
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Adresse et Contact pour livraison</h5>
+        <hr>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+      	<div class="m-2 p-3">
+      		<form action="{% url 'checkout' %}" method="POST">
+      			{% csrf_token %}
+
+      			<div class="form-group">
+      				<label for="">Adresse</label>
+      				<input type="text" name="adresse" id="" class="form-control" placeholder="" aria-describedby="helpId">
+      				
+      			</div>
+
+
+      			<div class="form-group">
+      				<label for="">Phone</label>
+      				<input type="text" name="phone" id="" class="form-control" placeholder="" aria-describedby="helpId">
+      			</div>
+      			
+      			<input type="submit" name="" class="btn btn-outline-success col-lg-6" value="Check out">
+      		</form>
+      			
+      		
+      	</div>
+        
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}	
+
+	
+		
+		   

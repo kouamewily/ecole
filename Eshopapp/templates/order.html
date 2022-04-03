@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load cart %}
+{% load custom_filter %}
+
+<h1>Mon Panier</h1>
+<div class="container">
+	<div class="border rounded p-4 m-4">
+		<p class=" text-center display-4 pl-4 ml-4"> Mes Commandes</p>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>N°</th>
+					<th>Image</th>
+					<th>Produit</th>
+					<th>Prix</th>
+					<th>Quantite</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for ord in order %}
+			<tr>
+				<td>{{forloop.counter}}</td>
+				<td> <img style="height: 50px;" class="rounded-circle" src="{{ord.produit.image.url}}"></td>
+				<td>{{ord.produit.nom}}</td>
+				<td>{{ord.date}}</td>
+				<td>{{ord.prix|monaie}}</td>
+				<td>{{ord.qte}}</td>
+				<td>{{ord.qte|multiply:ord.prix}}</td>
+				<td>{{ord.add}}</td>
+				<td>{{ord.phone}}</td>
+				<td>{{ord.customer.nom}}</td>
+
+				{% if ord.status %}
+
+				<td><small class="badge badge-success">livré</small></td>
+				{% else %}
+
+				<td><small class="badge badge-danger">Non livré</small></td>
+
+				{% endif %}
+
+				
+			</tr>
+
+			{% endfor %}
+
+			</tbody>
+		<tfoot>
+			<tr>
+				
+				<th class=" " colspan="4">
+					
+				</th>
+
+				<th class="" colspan="">
+					Total
+				</th>
+				<th>{{produits|total_cart_price:request.session.cart|monaie}}</th>
+			</tr>
+		</tfoot>	
+
+		</table>
+		
+		
+	</div>
+	
+	
+</div>
+
+
+
+
+
+
+{% endblock %}	
+
+	
+		
+		   
